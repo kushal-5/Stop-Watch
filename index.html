@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DIGI Stopwatch</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIGI Stopwatch</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1 class="brand">DIGI Stopwatch</h1>
+<div class="container">
+  <h1 class="brand">DIGI Stopwatch</h1>
 
-    <div class="stopwatch">
-      <div class="timerDisplay">00 : 00 : 00</div>
-    </div>
-
-    <div class="buttons">
-      <button id="startPauseBtn" class="btn" style="--clr:#22c55e;">Start</button>
-      <button id="lapBtn" class="btn" style="--clr:#facc15;">Lap</button>
-      <button id="resetBtn" class="btn" style="--clr:#3b82f6;">Reset</button>
-      <button id="clearHistoryBtn" class="btn" style="--clr:#ef4444;">Clear History</button>
-    </div>
-
-    <div class="laps">
-      <h2>Lap History</h2>
-      <ul id="lapsList"></ul>
-    </div>
-
-    <div class="history">
-      <h2>Saved Sessions</h2>
-      <ul id="historyList"></ul>
-    </div>
+  <div class="stopwatch">
+    <div class="timerDisplay">00 : 00 : 00</div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="buttons">
+    <button id="startPauseBtn" class="btn" style="--clr:#22c55e;">Start</button>
+    <button id="lapBtn" class="btn" style="--clr:#facc15;">Lap</button>
+    <button id="resetBtn" class="btn" style="--clr:#3b82f6;">Reset</button>
+    <button id="clearHistoryBtn" class="btn" style="--clr:#ef4444;">Clear History</button>
+    <button id="toggleModeBtn" class="btn" style="--clr:#0ea5e9;">Toggle Mode</button>
+  </div>
+
+  <div class="laps">
+    <h2>Lap History</h2>
+    <ul id="lapsList"></ul>
+  </div>
+
+  <div class="history">
+    <h2>Saved Sessions</h2>
+    <ul id="historyList"></ul>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
