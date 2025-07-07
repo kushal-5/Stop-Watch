@@ -3,6 +3,15 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+    transition: all 0.3s ease;
+    --dark-background: radial-gradient(circle at top, #0f172a, #1e293b, #111827);
+    --light-background: radial-gradient(circle at top, #f0f0f0, #e0e0e0, #cccccc);
+    --dark-text: #fff;
+    --light-text: #111;
+    --dark-laps-h2: #00e0ff;
+    --light-laps-h2: #0a0a0a;
+    --dark-laps-background: rgba(255,255,255,0.05);
+    --light-laps-background: rgba(0,0,0,0.05);
   }
   
   body {
