@@ -115,3 +115,4 @@ toggleModeBtn.addEventListener("click", () => {
     document.querySelectorAll('.laps, .history').forEach(el => el.style.background = "rgba(0,0,0,0.05)");
   }
 });
+// check for dark mode
