@@ -116,3 +116,12 @@ toggleModeBtn.addEventListener("click", () => {
   }
 });
 // check for dark mode
+// if dark mode is true, then set the background to dark mode
+// if dark mode is false, then set the background to light mode
+// if dark mode is true, then set the text color to white
+// if dark mode is false, then set the text color to black
+// if dark mode is true, then set the laps h2 and history h2 color to blue
+// if dark mode is false, then set the laps h2 and history h2 color to black
+// if dark mode is true, then set the laps and history background to dark mode
+// if dark mode is false, then set the laps and history background to light mode
+// if dark mode is true, then set the laps and history border to dark mode
