@@ -5,31 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIGI Stopwatch</title>
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-  <h1 class="brand">DIGI Stopwatch</h1>
+  <h1 class="brand">
+    <span class="brand-icon">⏱️</span>
+    DIGI STOPWATCH
+  </h1>
 
-  <div class="stopwatch">
-    <div class="timerDisplay">00 : 00 : 00</div>
+  <div class="timer-container">
+    <div class="stopwatch">
+      <div class="timerDisplay">00:00:00</div>
+      <div class="milliseconds">000</div>
+    </div>
+    
+    <!-- Analog Clock -->
+    <div class="analog-clock">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <!-- Clock face -->
+        <circle class="clock-face" cx="100" cy="100" r="95" fill="transparent" stroke="rgba(0,224,255,0.2)" stroke-width="3"/>
+        <!-- Hour markers -->
+        <g id="hourMarkers"></g>
+        <!-- Hands -->
+        <line id="secondHand" x1="100" y1="100" x2="100" y2="30" stroke="#00e0ff" stroke-width="2" stroke-linecap="round"/>
+        <line id="minuteHand" x1="100" y1="100" x2="100" y2="50" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
   </div>
 
-  <div class="buttons">
-    <button id="startPauseBtn" class="btn" style="--clr:#22c55e;">Start</button>
-    <button id="lapBtn" class="btn" style="--clr:#facc15;">Lap</button>
-    <button id="resetBtn" class="btn" style="--clr:#3b82f6;">Reset</button>
-    <button id="clearHistoryBtn" class="btn" style="--clr:#ef4444;">Clear History</button>
-    <button id="toggleModeBtn" class="btn" style="--clr:#0ea5e9;">Toggle Mode</button>
+  <div class="controls">
+    <button id="startPauseBtn" class="btn btn-primary" data-key="space">
+      <span class="btn-text">Start</span>
+      <span class="btn-key">Space</span>
+    </button>
+    <button id="lapBtn" class="btn btn-secondary" data-key="l">
+      <span class="btn-text">Lap</span>
+      <span class="btn-key">L</span>
+    </button>
+    <button id="resetBtn" class="btn btn-reset" data-key="r">
+      <span class="btn-text">Reset</span>
+      <span class="btn-key">R</span>
+    </button>
+    <button id="toggleModeBtn" class="btn btn-toggle" data-key="d">
+      <span class="btn-text">🌙</span>
+    </button>
   </div>
 
-  <div class="laps">
-    <h2>Lap History</h2>
-    <ul id="lapsList"></ul>
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-value" id="totalLaps">0</div>
+      <div class="stat-label">Total Laps</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="fastestLap">--:--</div>
+      <div class="stat-label">Fastest Lap</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="avgLap">--:--</div>
+      <div class="stat-label">Avg Lap</div>
+    </div>
   </div>
 
-  <div class="history">
-    <h2>Saved Sessions</h2>
-    <ul id="historyList"></ul>
+  <div class="content-grid">
+    <div class="laps">
+      <div class="section-header">
+        <h2>Lap History</h2>
+        <button id="clearHistoryBtn" class="btn-clear">Clear</button>
+      </div>
+      <ul id="lapsList"></ul>
+      <div id="lapsEmpty" class="empty-state">No laps recorded yet</div>
+    </div>
+
+    <div class="history">
+      <div class="section-header">
+        <h2>Saved Sessions</h2>
+        <span class="session-count" id="sessionCount">0</span>
+      </div>
+      <ul id="historyList"></ul>
+      <div id="historyEmpty" class="empty-state">No sessions saved yet</div>
+    </div>
   </div>
 </div>
 
