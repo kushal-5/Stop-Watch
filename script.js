@@ -88,3 +88,4 @@ function storeSession() {
   li.textContent = total;
   historyList.prepend(li);
 }
+// minor update
