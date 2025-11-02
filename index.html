@@ -16,24 +16,9 @@
     DIGI STOPWATCH
   </h1>
 
-  <div class="timer-container">
-    <div class="stopwatch">
-      <div class="timerDisplay">00:00:00</div>
-      <div class="milliseconds">000</div>
-    </div>
-    
-    <!-- Analog Clock -->
-    <div class="analog-clock">
-      <svg width="200" height="200" viewBox="0 0 200 200">
-        <!-- Clock face -->
-        <circle class="clock-face" cx="100" cy="100" r="95" fill="transparent" stroke="rgba(0,224,255,0.2)" stroke-width="3"/>
-        <!-- Hour markers -->
-        <g id="hourMarkers"></g>
-        <!-- Hands -->
-        <line id="secondHand" x1="100" y1="100" x2="100" y2="30" stroke="#00e0ff" stroke-width="2" stroke-linecap="round"/>
-        <line id="minuteHand" x1="100" y1="100" x2="100" y2="50" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-    </div>
+  <div class="stopwatch-display">
+    <div class="timerDisplay">00:00:00</div>
+    <div class="milliseconds">000</div>
   </div>
 
   <div class="controls">

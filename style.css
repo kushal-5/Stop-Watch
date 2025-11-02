@@ -70,43 +70,31 @@ body.light-mode .brand {
   }
 }
 
-.timer-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 30px;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .timer-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-.stopwatch {
+.stopwatch-display {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+  border-radius: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 30px;
+  text-align: center;
   transition: all 0.3s ease;
 }
 
-body.light-mode .stopwatch {
+body.light-mode .stopwatch-display {
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .timerDisplay {
   font-family: 'Orbitron', monospace;
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 900;
   color: #fff;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-  letter-spacing: 5px;
-  margin-bottom: 5px;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  letter-spacing: 8px;
+  margin-bottom: 10px;
 }
 
 body.light-mode .timerDisplay {
@@ -116,38 +104,15 @@ body.light-mode .timerDisplay {
 
 .milliseconds {
   font-family: 'Orbitron', monospace;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #facc15;
-  opacity: 0.8;
+  text-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
 }
 
 body.light-mode .milliseconds {
   color: #764ba2;
-}
-
-.analog-clock {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.clock-face {
-  filter: drop-shadow(0 0 10px rgba(0, 224, 255, 0.5));
-}
-
-#hourMarkers line {
-  stroke: rgba(0, 224, 255, 0.6);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-#secondHand,
-#minuteHand {
-  filter: drop-shadow(0 0 5px currentColor);
-  transform-origin: 100px 100px;
-  transition: all 0.1s ease;
+  text-shadow: none;
 }
 
 .controls {
@@ -525,7 +490,8 @@ body.light-mode .empty-state {
   }
   
   .timerDisplay {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    letter-spacing: 4px;
   }
   
   .milliseconds {
