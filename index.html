@@ -53,6 +53,26 @@
     </div>
   </div>
 
+  <div class="quick-presets">
+    <button class="preset-btn" data-preset="1">1 min</button>
+    <button class="preset-btn" data-preset="5">5 min</button>
+    <button class="preset-btn" data-preset="10">10 min</button>
+    <button class="preset-btn" data-preset="25">🍅 Pomodoro</button>
+    <button class="preset-btn" data-preset="30">30 min</button>
+    <button class="preset-btn" data-preset="60">1 hour</button>
+  </div>
+
+  <div class="split-display" id="splitDisplay" style="display: none;">
+    <div class="split-item">
+      <div class="split-label">Total Time</div>
+      <div class="split-value" id="totalTime">00:00:00</div>
+    </div>
+    <div class="split-item">
+      <div class="split-label">Current Lap</div>
+      <div class="split-value" id="currentLap">00:00:00</div>
+    </div>
+  </div>
+
   <div class="controls">
     <button id="startPauseBtn" class="btn btn-primary" data-key="space">
       <span class="btn-text">Start</span>
@@ -85,6 +105,15 @@
     <button id="themeBtn" class="extra-btn" title="Change Theme">
       <span>🎨</span> Theme
     </button>
+    <button id="fullscreenBtn" class="extra-btn" title="Fullscreen">
+      <span>⛶</span> Fullscreen
+    </button>
+    <button id="splitToggle" class="extra-btn" title="Split Timer">
+      <span>⏱️</span> Split
+    </button>
+    <button id="chartToggle" class="extra-btn" title="Show Chart">
+      <span>📊</span> Chart
+    </button>
     <div id="themeSelector" class="theme-selector" style="display: none;">
       <div class="theme-option" data-theme="default">Default</div>
       <div class="theme-option" data-theme="ocean">Ocean</div>
@@ -107,24 +136,40 @@
       <div class="stat-value" id="avgLap">--:--</div>
       <div class="stat-label">Avg Lap</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-value" id="slowestLap">--:--</div>
+      <div class="stat-label">Slowest Lap</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="totalTimeStat">00:00:00</div>
+      <div class="stat-label">Total Time</div>
+    </div>
+  </div>
+
+  <div class="lap-chart-container" id="lapChartContainer" style="display: none;">
+    <div class="section-header">
+      <h2>📊 Lap Time Chart</h2>
+      <button id="toggleChartBtn" class="btn-clear-small">Hide</button>
+    </div>
+    <canvas id="lapChart" width="400" height="200"></canvas>
   </div>
 
   <div class="content-grid">
-    <div class="laps">
+  <div class="laps">
       <div class="section-header">
-        <h2>Lap History</h2>
+    <h2>Lap History</h2>
         <button id="clearHistoryBtn" class="btn-clear">Clear</button>
       </div>
-      <ul id="lapsList"></ul>
+    <ul id="lapsList"></ul>
       <div id="lapsEmpty" class="empty-state">No laps recorded yet</div>
-    </div>
+  </div>
 
-    <div class="history">
+  <div class="history">
       <div class="section-header">
-        <h2>Saved Sessions</h2>
+    <h2>Saved Sessions</h2>
         <span class="session-count" id="sessionCount">0</span>
       </div>
-      <ul id="historyList"></ul>
+    <ul id="historyList"></ul>
       <div id="historyEmpty" class="empty-state">No sessions saved yet</div>
     </div>
   </div>

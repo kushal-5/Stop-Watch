@@ -33,6 +33,17 @@ const importBtn = document.getElementById("importBtn");
 const importFile = document.getElementById("importFile");
 const themeBtn = document.getElementById("themeBtn");
 const themeSelector = document.getElementById("themeSelector");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const splitToggle = document.getElementById("splitToggle");
+const splitDisplay = document.getElementById("splitDisplay");
+const totalTimeEl = document.getElementById("totalTime");
+const currentLapEl = document.getElementById("currentLap");
+const chartToggle = document.getElementById("chartToggle");
+const lapChartContainer = document.getElementById("lapChartContainer");
+const toggleChartBtn = document.getElementById("toggleChartBtn");
+const lapChart = document.getElementById("lapChart");
+const slowestLapEl = document.getElementById("slowestLap");
+const totalTimeStatEl = document.getElementById("totalTimeStat");
 
 let msec = 0, secs = 0, mins = 0;
 let countdownMins = 0, countdownSecs = 0, countdownMsecs = 0;
@@ -45,6 +56,9 @@ let lapTimes = [];
 let darkMode = false;
 let soundEnabled = true;
 let currentTheme = "default";
+let lastLapTime = 0;
+let splitEnabled = false;
+let chartEnabled = false;
 
 // Audio context for sound effects
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -98,6 +112,18 @@ window.onload = () => {
   updateSoundButton();
   applyTheme(currentTheme);
   toggleTheme();
+  
+  // Load split and chart preferences
+  splitEnabled = localStorage.getItem("splitEnabled") === "true";
+  chartEnabled = localStorage.getItem("chartEnabled") === "true";
+  if (splitEnabled) {
+    splitDisplay.style.display = "grid";
+    splitToggle.classList.add("active");
+  }
+  if (chartEnabled) {
+    lapChartContainer.style.display = "block";
+    chartToggle.classList.add("active");
+  }
 };
 
 // Mode Toggle
@@ -249,6 +275,73 @@ importFile.addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 
+// Quick Presets
+document.querySelectorAll(".preset-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const minutes = parseInt(btn.dataset.preset);
+    if (isCountdownMode) {
+      countdownMin.value = minutes;
+      countdownSec.value = 0;
+      countdownMsec.value = 0;
+      setCountdownBtn.click();
+    } else {
+      targetMin.value = minutes;
+      targetSec.value = 0;
+      setTargetBtn.click();
+    }
+    playSound(700, 0.1);
+  });
+});
+
+// Split Toggle
+splitToggle.addEventListener("click", () => {
+  splitEnabled = !splitEnabled;
+  splitDisplay.style.display = splitEnabled ? "grid" : "none";
+  splitToggle.classList.toggle("active", splitEnabled);
+  localStorage.setItem("splitEnabled", splitEnabled.toString());
+  playSound(600, 0.1);
+});
+
+// Chart Toggle
+chartToggle.addEventListener("click", () => {
+  chartEnabled = !chartEnabled;
+  lapChartContainer.style.display = chartEnabled ? "block" : "none";
+  chartToggle.classList.toggle("active", chartEnabled);
+  localStorage.setItem("chartEnabled", chartEnabled.toString());
+  if (chartEnabled) {
+    updateChart();
+  }
+  playSound(600, 0.1);
+});
+
+toggleChartBtn.addEventListener("click", () => {
+  chartToggle.click();
+});
+
+// Fullscreen
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.log("Error attempting to enable fullscreen:", err);
+    });
+    fullscreenBtn.innerHTML = `<span>⛶</span> Exit`;
+  } else {
+    document.exitFullscreen();
+    fullscreenBtn.innerHTML = `<span>⛶</span> Fullscreen`;
+  }
+  playSound(600, 0.1);
+});
+
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) {
+    document.body.classList.add("fullscreen");
+    fullscreenBtn.innerHTML = `<span>⛶</span> Exit`;
+  } else {
+    document.body.classList.remove("fullscreen");
+    fullscreenBtn.innerHTML = `<span>⛶</span> Fullscreen`;
+  }
+});
+
 // Theme Selector
 themeBtn.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -322,15 +415,19 @@ resetBtn.addEventListener("click", () => {
 function resetTimer() {
   clearInterval(timerId);
   if (!isCountdownMode) {
-    storeSession();
+  storeSession();
   }
   mins = secs = msec = 0;
+  lastLapTime = 0;
   if (isCountdownMode) {
     mins = countdownMins;
     secs = countdownSecs;
     msec = countdownMsecs;
   }
   updateDisplay();
+  if (splitEnabled) {
+    updateSplitDisplay();
+  }
   laps = [];
   lapTimes = [];
   lapsList.innerHTML = "";
@@ -340,6 +437,9 @@ function resetTimer() {
   targetAlert.style.display = "none";
   updateStats();
   updateEmptyStates();
+  if (chartEnabled) {
+    updateChart();
+  }
 }
 
 // Timer function (stopwatch)
@@ -355,6 +455,9 @@ function startTimer() {
   }
   
   updateDisplay();
+  if (splitEnabled) {
+    updateSplitDisplay();
+  }
   checkTargetTime();
 }
 
@@ -395,6 +498,24 @@ function countdownTimer() {
 function updateDisplay() {
   timerDisplay.textContent = `${format(mins)}:${format(secs)}:${format(msec)}`;
   millisecondsDisplay.textContent = format(msec);
+  
+  // Update total time stat
+  totalTimeStatEl.textContent = `${format(mins)}:${format(secs)}:${format(msec)}`;
+}
+
+function updateSplitDisplay() {
+  const totalMillis = mins * 60000 + secs * 1000 + msec * 10;
+  totalTimeEl.textContent = `${format(mins)}:${format(secs)}:${format(msec)}`;
+  
+  if (lapTimes.length > 0) {
+    const currentLapMillis = totalMillis - lastLapTime;
+    const lapSecs = Math.floor(currentLapMillis / 1000);
+    const lapMins = Math.floor(lapSecs / 60);
+    const lapMsec = Math.floor((currentLapMillis % 1000) / 10);
+    currentLapEl.textContent = `${format(lapMins)}:${format(lapSecs % 60)}:${format(lapMsec)}`;
+  } else {
+    currentLapEl.textContent = `${format(mins)}:${format(secs)}:${format(msec)}`;
+  }
 }
 
 function checkTargetTime() {
@@ -418,6 +539,7 @@ lapBtn.addEventListener("click", () => {
   
   const totalMillis = mins * 60000 + secs * 1000 + msec * 10;
   lapTimes.push(totalMillis);
+  lastLapTime = totalMillis;
   const lapIndex = laps.length + 1;
   
   let diffText = "";
@@ -441,6 +563,9 @@ lapBtn.addEventListener("click", () => {
   
   updateStats();
   updateEmptyStates();
+  if (chartEnabled) {
+    updateChart();
+  }
   playSound(900, 0.1);
   
   // Add flash animation
@@ -502,6 +627,7 @@ function updateStats() {
   if (lapTimes.length === 0) {
     fastestLapEl.textContent = "--:--";
     avgLapEl.textContent = "--:--";
+    slowestLapEl.textContent = "--:--";
     return;
   }
   
@@ -512,13 +638,11 @@ function updateStats() {
       relativeTimes.push(lapTimes[i] - lapTimes[i - 1]);
     }
     const fastest = Math.min(...relativeTimes);
+    const slowest = Math.max(...relativeTimes);
     fastestLapEl.textContent = formatTime(fastest);
-  } else {
-    fastestLapEl.textContent = formatTime(lapTimes[0]);
-  }
-  
-  // Calculate average lap
-  if (lapTimes.length > 1) {
+    slowestLapEl.textContent = formatTime(slowest);
+    
+    // Calculate average lap
     let totalRelative = 0;
     for (let i = 1; i < lapTimes.length; i++) {
       totalRelative += lapTimes[i] - lapTimes[i - 1];
@@ -526,8 +650,86 @@ function updateStats() {
     const avg = totalRelative / (lapTimes.length - 1);
     avgLapEl.textContent = formatTime(avg);
   } else {
+    fastestLapEl.textContent = formatTime(lapTimes[0]);
     avgLapEl.textContent = formatTime(lapTimes[0]);
+    slowestLapEl.textContent = formatTime(lapTimes[0]);
   }
+}
+
+// Update Chart
+function updateChart() {
+  if (lapTimes.length < 2) return;
+  
+  const ctx = lapChart.getContext('2d');
+  const width = lapChart.width;
+  const height = lapChart.height;
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, width, height);
+  
+  // Calculate relative times
+  const relativeTimes = [];
+  for (let i = 1; i < lapTimes.length; i++) {
+    relativeTimes.push(lapTimes[i] - lapTimes[i - 1]);
+  }
+  
+  if (relativeTimes.length === 0) return;
+  
+  const maxTime = Math.max(...relativeTimes);
+  const minTime = Math.min(...relativeTimes);
+  const range = maxTime - minTime || 1;
+  const padding = 40;
+  const chartWidth = width - padding * 2;
+  const chartHeight = height - padding * 2;
+  const barWidth = chartWidth / relativeTimes.length;
+  
+  // Draw grid lines
+  ctx.strokeStyle = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight / 5) * i;
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(width - padding, y);
+    ctx.stroke();
+  }
+  
+  // Draw bars
+  relativeTimes.forEach((time, index) => {
+    const normalizedTime = (time - minTime) / range;
+    const barHeight = chartHeight * normalizedTime;
+    const x = padding + index * barWidth;
+    const y = padding + chartHeight - barHeight;
+    
+    // Color based on performance
+    const isFastest = time === minTime;
+    const isSlowest = time === maxTime;
+    
+    if (isFastest) {
+      ctx.fillStyle = '#22c55e';
+    } else if (isSlowest) {
+      ctx.fillStyle = '#ef4444';
+    } else {
+      ctx.fillStyle = darkMode ? '#3b82f6' : '#2563eb';
+    }
+    
+    ctx.fillRect(x, y, barWidth - 2, barHeight);
+    
+    // Label
+    ctx.fillStyle = darkMode ? '#fff' : '#333';
+    ctx.font = '10px Poppins';
+    ctx.textAlign = 'center';
+    ctx.fillText(formatTime(time), x + barWidth / 2, height - 5);
+  });
+  
+  // Draw axis labels
+  ctx.fillStyle = darkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+  ctx.font = '12px Poppins';
+  ctx.textAlign = 'left';
+  ctx.fillText('Lap Times', padding, padding - 10);
+  ctx.textAlign = 'right';
+  ctx.fillText(formatTime(maxTime), width - padding, padding - 10);
+  ctx.fillText(formatTime(minTime), width - padding, height - padding + 20);
 }
 
 // Format time from milliseconds
