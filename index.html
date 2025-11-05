@@ -16,9 +16,41 @@
     DIGI STOPWATCH
   </h1>
 
+  <div class="mode-selector">
+    <button id="modeToggle" class="mode-btn active" data-mode="stopwatch">
+      <span>⏱️</span> Stopwatch
+    </button>
+    <button id="countdownToggle" class="mode-btn" data-mode="countdown">
+      <span>⏰</span> Countdown
+    </button>
+  </div>
+
   <div class="stopwatch-display">
     <div class="timerDisplay">00:00:00</div>
     <div class="milliseconds">000</div>
+    <div id="targetAlert" class="target-alert" style="display: none;">🎯 Target Reached!</div>
+  </div>
+
+  <div class="countdown-input" id="countdownInput" style="display: none;">
+    <div class="input-group">
+      <input type="number" id="countdownMin" min="0" max="59" placeholder="Min" value="0">
+      <span>:</span>
+      <input type="number" id="countdownSec" min="0" max="59" placeholder="Sec" value="0">
+      <span>:</span>
+      <input type="number" id="countdownMsec" min="0" max="99" placeholder="00" value="0">
+    </div>
+    <button id="setCountdownBtn" class="btn-set">Set Countdown</button>
+  </div>
+
+  <div class="target-time-section">
+    <div class="target-input-group">
+      <label>🎯 Target Time:</label>
+      <input type="number" id="targetMin" min="0" max="59" placeholder="M" value="0">
+      <span>:</span>
+      <input type="number" id="targetSec" min="0" max="59" placeholder="S" value="0">
+      <button id="setTargetBtn" class="btn-set-small">Set</button>
+      <button id="clearTargetBtn" class="btn-clear-small">Clear</button>
+    </div>
   </div>
 
   <div class="controls">
@@ -37,6 +69,29 @@
     <button id="toggleModeBtn" class="btn btn-toggle" data-key="d">
       <span class="btn-text">🌙</span>
     </button>
+  </div>
+
+  <div class="extra-controls">
+    <button id="soundToggle" class="extra-btn" title="Toggle Sound">
+      <span>🔊</span> Sound
+    </button>
+    <button id="exportBtn" class="extra-btn" title="Export Data">
+      <span>📥</span> Export
+    </button>
+    <button id="importBtn" class="extra-btn" title="Import Data">
+      <span>📤</span> Import
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+    <button id="themeBtn" class="extra-btn" title="Change Theme">
+      <span>🎨</span> Theme
+    </button>
+    <div id="themeSelector" class="theme-selector" style="display: none;">
+      <div class="theme-option" data-theme="default">Default</div>
+      <div class="theme-option" data-theme="ocean">Ocean</div>
+      <div class="theme-option" data-theme="sunset">Sunset</div>
+      <div class="theme-option" data-theme="forest">Forest</div>
+      <div class="theme-option" data-theme="purple">Purple</div>
+    </div>
   </div>
 
   <div class="stats-container">
